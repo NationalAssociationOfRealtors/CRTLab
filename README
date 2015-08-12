@@ -1,0 +1,19 @@
+install nodejs
+install bower
+    sudo npm install -g bower
+install cordova
+    sudo npm install -g cordova
+install bower dependencies
+    cd www && bower install
+install cordova plugins
+    https://github.com/petermetz/cordova-plugin-ibeacon#3.3.0
+    https://github.com/katzer/cordova-plugin-local-notifications#0.8.1
+
+install android sdk... takes forever...
+add android platform
+    cordova platform add android
+
+enable bluetooth and USB Debugging on phone
+
+install app on phone
+    cordova run android
