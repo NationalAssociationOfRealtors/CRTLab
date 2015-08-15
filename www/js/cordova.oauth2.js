@@ -82,7 +82,7 @@
         var login_url = options.auth_url + '?' + $.param(paramObj);
 
         // open Cordova inapp-browser with login url
-        var loginWindow = window.open(login_url, '_self', 'location=no,clearsessioncache=yes');
+        var loginWindow = window.open(login_url, '_self', 'location=no');
 
         // check if redirect url has code, access_token or error
         $(loginWindow).on('loadstart', function(e) {
@@ -108,7 +108,7 @@
                                 } else {
                                     access_token = data.getParam("access_token");
                                 }
-                                successCallback(access_token, data); 
+                                successCallback(access_token, data);
                             },
                             error: function(error){
                                 errorCallback(error, error);
@@ -123,13 +123,14 @@
                 var access_token = url.split("access_token=")[1].split("&")[0];
                 var error = url.split("error=")[1];
                 if(access_token || error){
-                    loginWindow.close();
                     oauth2Logout(options);
                     if(access_token){
                         successCallback(access_token, url.split("#")[1]);
                     } else if(error){
                         errorCallback(error, url.split("#")[1]);
                     }
+                    loginWindow.close();
+                    return;
                 }
             }
         });

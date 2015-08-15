@@ -14,6 +14,7 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
     }
 
     function onDidRangeBeaconsInRegion(result){
+        $rootScope.$emit('beacon:in-region', {result:result});
         $rootScope.$apply(function(){
             me.beacons = result.beacons;
         });
