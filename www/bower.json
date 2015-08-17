@@ -17,5 +17,8 @@
     "angular": "~1.4.3",
     "bootstrap": "~3.3.5",
     "angular-http-auth": "~1.2.2"
+  },
+  "resolutions": {
+    "angular": "^1.2"
   }
 }

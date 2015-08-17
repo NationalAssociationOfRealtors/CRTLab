@@ -29,7 +29,7 @@
 
 (function($){
     $.oauth2 = function (options, successCallback, errorCallback) {
-
+        window.open = cordova.InAppBrowser.open;
         // checks if all the required oauth2 params are defined
         var checkOauth2Params = function(options){
             var missing = "";
@@ -120,17 +120,21 @@
                 }
             // if implicit method check for acces_token/error in url hash fragment
             } else if(options.response_type == "token") {
-                var access_token = url.split("access_token=")[1].split("&")[0];
-                var error = url.split("error=")[1];
-                if(access_token || error){
-                    oauth2Logout(options);
-                    if(access_token){
-                        successCallback(access_token, url.split("#")[1]);
-                    } else if(error){
-                        errorCallback(error, url.split("#")[1]);
+                try{
+                    var access_token = url.split("access_token=")[1].split("&")[0];
+                    var error = url.split("error=")[1];
+                    if(access_token || error){
+                        oauth2Logout(options);
+                        if(access_token){
+                            successCallback(access_token, url.split("#")[1]);
+                        } else if(error){
+                            errorCallback(error, url.split("#")[1]);
+                        }
+                        loginWindow.close();
+                        return;
                     }
-                    loginWindow.close();
-                    return;
+                }catch(e){
+                    console.log(e);
                 }
             }
         });
