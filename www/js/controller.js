@@ -1,74 +1,76 @@
-var CRTLab = angular.module('CRTLab', ['RegionService', 'http-auth-interceptor', 'ngWebsocket', 'SocketService']);
+var CRTLab = angular.module('CRTLab', ['RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService']);
 
-CRTLab.controller('LabCtrl', ['$scope', '$http', 'Region', 'authService', '$websocket', 'Socket', function($scope, $http, Region, authService, $websocket, Socket){
+CRTLab.controller('LabCtrl', ['$scope', '$http', '$q', 'Region', 'authService', 'Socket', 'Auth', function($scope, $http, $q, Region, authService, Socket, Auth){
     var address = "172.16.121.179"
     var api_url = "http://"+address;
     var socket_url = "ws://"+address+"/socket";
     var client_id = '55d1f9e7333e0a203120fb0a'
-    var token = get_token();
     $scope.user = {};
-    $scope.orderProp = 'rssi';
+    $scope.team = [];
     $scope.region = Region;
-
-    var ws = $websocket.$new({
-        url:socket_url,
-        protocols: "json",
-        lazy: true,
+    $scope.token = null;
+    Auth.init({
+        url: api_url+'/auth/authorize',
+        response_type: 'token',
+        client_id: client_id,
+        redirect_uri: api_url,
+        other_params: {scope: 'inoffice'}
     });
 
-    ws.$on('inoffice', function(data){
-        console.log(data);
+    Auth.get_token().then(function(token){
+        $http.defaults.headers.common.Authorization = token;
+        $scope.token = token;
+        init();
+    }, function(){
+        login();
     });
+
+    function login(){
+        Auth.login().then(function(result){
+            window.localStorage.setItem("token", result.token);
+            $http.defaults.headers.common.Authorization = result.token;
+            $scope.token = result.token;
+            authService.loginConfirmed();
+            init();
+        }, function(error){
+            console.log(error);
+        });
+    }
 
     function init(){
-        token = get_token();
-        Region.init({
-            uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
-            id:'CRT Lab'
-        });
-        Socket.init(ws, token, client_id);
-    }
-
-    function get_token(){
-        try{
-            var token = window.localStorage.getItem("token");
-            if(token){
-                $http.defaults.headers.common.Authorization = token;
+        var ws = Socket.init(socket_url, $scope.token, client_id);
+        ws.$on('inoffice', function(data){
+            for(i in $scope.team){
+                if($scope.team[i]._id == data.user._id){
+                    $scope.team[i] = data.user;
+                }
             }
-            return token;
-        }catch(e){
-            console.log(e);
-        }
-    }
-
-    $scope.$on('beacon:in-region', function(event, result){
-        $scope.beacons = result.beacons;
-        if(result.beacons.length && Socket.is_open()){
-            Socket.emit('inoffice', {'result':result});
-        }
-    });
-
-    $scope.$on('event:auth-loginRequired', function(event, data){
-        $.oauth2({
-            auth_url: api_url+'/auth/authorize',
-            response_type: 'token',
-            client_id: client_id,
-            redirect_uri: api_url,
-            other_params: {scope: 'inoffice'}
-        }, function(token, response){
-            console.log(token);
-            window.localStorage.setItem("token", token);
-            $http.defaults.headers.common.Authorization = token;
-            init();
-            authService.loginConfirmed();
-        }, function(error, response){
-            alert(error);
+            var state = data.result ? "arrived" : "departed";
+            cordova.plugins.notification.local.schedule({
+                id: parseInt(data.user._id),
+                title: data.user.name+' has '+state+'.',
+                icon: "file://img/crt_logo.png",
+            });
         });
-    });
 
-    //Kick everything off.
-    $http.get(api_url+"/lab/me").then(function(response){
-        $scope.user = response.data[0];
-        init();
-    });
+        $scope.$on('region:state', function(event, result){
+            Socket.emit('inoffice', {'result':result});
+        });
+
+        $scope.$on('event:auth-loginRequired', function(event, data){
+            login();
+        });
+
+        $http.get(api_url+"/lab/me").then(function(response){
+            $scope.user = response.data[0];
+            Region.init({
+                uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
+                id:'CRT Lab'
+            });
+        });
+
+        $http.get(api_url+"/lab/team").then(function(response){
+            $scope.team = response.data[0];
+        });
+    }
 }]);

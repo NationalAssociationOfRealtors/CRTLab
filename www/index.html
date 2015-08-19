@@ -9,34 +9,35 @@
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
+    <script src="cordova.js"></script>
     <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
     <script src="bower_components/ng-websocket/ng-websocket.js"></script>
-
     <script src="js/controller.js"></script>
     <script src="js/services/region-service.js"></script>
-    <script src="js/services/socket.js"></script>
-    <script src="cordova.js"></script>
+    <script src="js/services/socket-service.js"></script>
+    <script src="js/services/login-service.js"></script>
     <script src="js/index.js"></script>
-    <script src="js/cordova.oauth2.js"></script>
-
 </head>
 <body ng-controller="LabCtrl">
-    <h3>
-        {{user.name}} | CRTLab
-        <span class="label label-success" ng-show="region.in_region">In Office</span>
-        <span class="label label-danger" ng-show="!region.in_region">Out of Office</div>
-    </h3>
-    <div class="btn-group btn-group-xs" role="group">
-        <button class="btn btn-default" type="button" ng-click="orderProp='rssi'">Distance</button>
-        <button class="btn btn-default" type="button" ng-click="orderProp='major'">Major</button>
-    </div>
+    <nav class="navbar navbar-default navbar-static-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand">
+                    {{user.name}}
+                    <span class="label label-success" ng-show="region.in_region">In Office</span>
+                    <span class="label label-danger" ng-show="!region.in_region">Out of Office</span>
+                </a>
+            </div>
+        </div>
+    </nav>
     <ul class="list-group">
-        <li ng-repeat="beacon in region.beacons | orderBy:orderProp" class="list-group-item">
-            <span class="badge">{{beacon.rssi}}</span>
-            {{beacon.major}}:{{beacon.minor}}
+        <li ng-repeat="user in team" class="list-group-item">
+            {{user.name}}
+            <span class="label label-success pull-right" ng-show="user.in_office">In</span>
+            <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
         </li>
     </ul>
 </body>

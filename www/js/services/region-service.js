@@ -6,14 +6,16 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
     this.in_region = false;
 
     function onDidDetermineStateForRegion(result){
-        me.in_region = result.state == 'CLRegionStateInside';
+        var in_region = result.state == 'CLRegionStateInside';
+        me.in_region = in_region;
+        $rootScope.$broadcast('region:state', in_region)
     }
 
     function onDidRangeBeaconsInRegion(result){
         $rootScope.$apply(function(){
             me.beacons = result.beacons;
         });
-        $rootScope.$broadcast('beacon:in-region', result);
+        $rootScope.$broadcast('region:beacons', result);
     }
 
     function onError(errorMessage){
