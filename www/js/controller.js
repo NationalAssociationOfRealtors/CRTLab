@@ -1,6 +1,6 @@
-var CRTLab = angular.module('CRTLab', ['RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService']);
+var LabControllers = angular.module('LabControllers', []);
 
-CRTLab.controller('LabCtrl', ['$scope', '$http', '$q', 'Region', 'authService', 'Socket', 'Auth', function($scope, $http, $q, Region, authService, Socket, Auth){
+LabControllers.controller('LabIndex', ['$scope', '$http', '$q', 'Region', 'authService', 'Socket', 'Auth', function($scope, $http, $q, Region, authService, Socket, Auth){
     var address = "172.16.121.163"
     var api_url = "http://"+address;
     var socket_url = "ws://"+address+"/socket";
@@ -39,7 +39,7 @@ CRTLab.controller('LabCtrl', ['$scope', '$http', '$q', 'Region', 'authService', 
     }
 
     function get_times(){
-        $http.get(api_url+"/lab/user/"+$scope.user._id).then(function(response){
+        $http.get(api_url+"/lab/user/"+$scope.user._id+"/time").then(function(response){
             $scope.times = response.data[0];
         });
     }
@@ -53,8 +53,9 @@ CRTLab.controller('LabCtrl', ['$scope', '$http', '$q', 'Region', 'authService', 
                     cordova.plugins.locationManager.enableBluetooth();
                 }
             })
-    .fail(console.error)
-    .done();
+            .fail(console.error)
+            .done();
+
         ws.$on('inoffice', function(data){
             for(i in $scope.team){
                 if($scope.team[i]._id == data.user._id){
@@ -95,4 +96,15 @@ CRTLab.controller('LabCtrl', ['$scope', '$http', '$q', 'Region', 'authService', 
             $scope.team = response.data[0];
         });
     }
+}]);
+
+
+LabControllers.controller('LabUser', ['$scope', '$http', '$routeParams', function($scope, $http, $routeParams){
+    var address = "172.16.121.163";
+    var api_url = "http://"+address;
+    $scope.user = {};
+    $http.get(api_url+"/lab/user/"+$routeParams.userId).then(function(response){
+        $scope.user = response.data[0];
+        console.log(response);
+    });
 }]);

@@ -10,48 +10,19 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/index.css">
     <script src="cordova.js"></script>
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
     <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
     <script src="bower_components/ng-websocket/ng-websocket.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
     <script src="js/controller.js"></script>
     <script src="js/services/region-service.js"></script>
     <script src="js/services/socket-service.js"></script>
     <script src="js/services/login-service.js"></script>
     <script src="js/index.js"></script>
 </head>
-<body ng-controller="LabCtrl">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    {{user.name}}
-                </a>
-                <p class="navbar-btn pull-right nav-inoffice">
-                    <a href="#" class="btn btn-success" ng-show="user.in_office">In Office</a>
-                    <a href="#" class="btn btn-danger" ng-show="!user.in_office">Out of Office</a>
-                </p>
-            </div>
-        </div>
-    </nav>
-    <div class="container-fluid content">
-        <h3>Team</h3>
-        <ul class="list-group">
-            <li ng-repeat="user in team" class="list-group-item">
-                {{user.name}}
-                <span class="label label-success pull-right" ng-show="user.in_office">In</span>
-                <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
-            </li>
-        </ul>
-        <h3>Punch-clock</h3>
-        <ul class="list-group">
-            <li ng-repeat="time in times" class="list-group-item">
-                {{time.time | date:'MM/dd/yyyy @ h:mma'}}
-                <span class="label label-success pull-right" ng-show="time.value">In</span>
-                <span class="label label-danger pull-right" ng-show="!time.value">Out</span>
-            </li>
-        </ul>
-    </div>
+<body>
+    <div ng-view></div>
 </body>
 </html>
