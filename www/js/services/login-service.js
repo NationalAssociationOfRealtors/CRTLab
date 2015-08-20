@@ -30,7 +30,6 @@ String.prototype.getParam = function( str ){
 var LoginService = angular.module('LoginService', []);
 
 LoginService.service('Auth', ['$q', function ($q) {
-    window.open = cordova.InAppBrowser.open;
     this.open = false;
     this.cfg = {};
     var me = this;
@@ -63,7 +62,7 @@ LoginService.service('Auth', ['$q', function ($q) {
         // open Cordova inapp-browser with login url
         if(!me.open){
             me.open = true;
-            var loginWindow = window.open(login_url, '_self', 'location=no');
+            var loginWindow = cordova.InAppBrowser.open(login_url, '_self', 'location=no');
             $(loginWindow).on('loadstart', function(e) {
                 var url = e.originalEvent.url;
                 console.log(url);

@@ -22,23 +22,36 @@
     <script src="js/index.js"></script>
 </head>
 <body ng-controller="LabCtrl">
-    <nav class="navbar navbar-default navbar-static-top">
+    <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <a class="navbar-brand">
+                <a class="navbar-brand" href="#">
                     {{user.name}}
-                    <span class="label label-success" ng-show="region.in_region">In Office</span>
-                    <span class="label label-danger" ng-show="!region.in_region">Out of Office</span>
                 </a>
+                <p class="navbar-btn pull-right nav-inoffice">
+                    <a href="#" class="btn btn-success" ng-show="user.in_office">In Office</a>
+                    <a href="#" class="btn btn-danger" ng-show="!user.in_office">Out of Office</a>
+                </p>
             </div>
         </div>
     </nav>
-    <ul class="list-group">
-        <li ng-repeat="user in team" class="list-group-item">
-            {{user.name}}
-            <span class="label label-success pull-right" ng-show="user.in_office">In</span>
-            <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
-        </li>
-    </ul>
+    <div class="container-fluid content">
+        <h3>Team</h3>
+        <ul class="list-group">
+            <li ng-repeat="user in team" class="list-group-item">
+                {{user.name}}
+                <span class="label label-success pull-right" ng-show="user.in_office">In</span>
+                <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
+            </li>
+        </ul>
+        <h3>Punch-clock</h3>
+        <ul class="list-group">
+            <li ng-repeat="time in times" class="list-group-item">
+                {{time.time | date:'MM/dd/yyyy @ h:mma'}}
+                <span class="label label-success pull-right" ng-show="time.value">In</span>
+                <span class="label label-danger pull-right" ng-show="!time.value">Out</span>
+            </li>
+        </ul>
+    </div>
 </body>
 </html>

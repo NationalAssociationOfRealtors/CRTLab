@@ -26,7 +26,7 @@
     <plugin name="cordova-plugin-whitelist" spec="1" />
     <plugin name="com.unarin.cordova.beacon" spec="../cordova-plugin-ibeacon" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="../cordova-plugin-local-notifications" />
-    <plugin name="cordova-plugin-inappbrowser" spec="^1.0.2-dev" />
+    <plugin name="cordova-plugin-inappbrowser" spec="1.0.1" />
     <plugin name="org.apache.cordova.statusbar" spec="^0.1.10" />
     <preference name="StatusBarOverlaysWebView" value="false" />
 </widget>

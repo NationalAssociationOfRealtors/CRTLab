@@ -16,9 +16,10 @@
   "dependencies": {
     "angular": "~1.4.3",
     "bootstrap": "~3.3.5",
-    "angular-http-auth": "~1.2.2"
+    "angular-http-auth": "~1.2.2",
+    "ng-websocket": "~0.2.1"
   },
   "resolutions": {
-    "angular": "^1.2"
+    "angular": "~1.4.3"
   }
 }
