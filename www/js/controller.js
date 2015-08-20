@@ -1,7 +1,7 @@
 var CRTLab = angular.module('CRTLab', ['RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService']);
 
 CRTLab.controller('LabCtrl', ['$scope', '$http', '$q', 'Region', 'authService', 'Socket', 'Auth', function($scope, $http, $q, Region, authService, Socket, Auth){
-    var address = "172.16.121.179"
+    var address = "172.16.121.163"
     var api_url = "http://"+address;
     var socket_url = "ws://"+address+"/socket";
     var client_id = '55d1f9e7333e0a203120fb0a'
