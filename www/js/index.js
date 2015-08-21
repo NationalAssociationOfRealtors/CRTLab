@@ -1,7 +1,7 @@
-var address = "192.168.1.3"
+var address = "192.168.1.174";
 var api_url = "http://"+address;
 var socket_url = "ws://"+address+"/socket";
-var client_id = '55d67f89503f1a000c81cc9d';
+var client_id = '55d603c0fb3d90000b009fe3';
 var api_token = null;
 
 var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'LabControllers']);
@@ -21,7 +21,7 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Team', function($http, $rootScope, $interval, Region, Socket, Auth, Team){
+CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Team', 'authService',  function($http, $rootScope, $interval, Region, Socket, Auth, Team, authService){
     cordova.plugins.locationManager.isBluetoothEnabled()
         .then(function(isEnabled){
             console.log("Bluetooth isEnabled: " + isEnabled);

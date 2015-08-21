@@ -42,12 +42,17 @@ LoginService.service('Auth', ['$q', '$http', function ($q, $http) {
         var d = $q.defer();
         var token = window.localStorage.getItem("token");
         if(token){
-            $http.defaults.headers.common.Authorization = token;
+            set_token(token);
             d.resolve(token);
         }else{
             d.reject();
         }
         return d.promise;
+    }
+
+    function set_token(token){
+        $http.defaults.headers.common.Authorization = " Bearer " + token;
+        window.localStorage.setItem("token", token);
     }
 
     this.login = function(){
@@ -87,8 +92,7 @@ LoginService.service('Auth', ['$q', '$http', function ($q, $http) {
                                     } else {
                                         access_token = data.getParam("access_token");
                                     }
-                                    window.localStorage.setItem("token", access_token);
-                                    $http.defaults.headers.common.Authorization = access_token;
+                                    set_token(access_token);
                                     d.resolve({token:access_token, data:data});
                                 },
                                 error: function(error){
@@ -106,8 +110,7 @@ LoginService.service('Auth', ['$q', '$http', function ($q, $http) {
                         var error = url.split("error=")[1];
                         if(access_token || error){
                             if(access_token){
-                                window.localStorage.setItem("token", access_token);
-                                $http.defaults.headers.common.Authorization = access_token;
+                                set_token(access_token);
                                 d.resolve({token:access_token, data:url.split("#")[1]});
                             } else if(error){
                                 d.reject({error:error, data:url.split("#")[1]});
