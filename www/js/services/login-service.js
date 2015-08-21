@@ -29,7 +29,7 @@ String.prototype.getParam = function( str ){
 
 var LoginService = angular.module('LoginService', []);
 
-LoginService.service('Auth', ['$q', function ($q) {
+LoginService.service('Auth', ['$q', '$http', function ($q, $http) {
     this.open = false;
     this.cfg = {};
     var me = this;
@@ -42,6 +42,7 @@ LoginService.service('Auth', ['$q', function ($q) {
         var d = $q.defer();
         var token = window.localStorage.getItem("token");
         if(token){
+            $http.defaults.headers.common.Authorization = token;
             d.resolve(token);
         }else{
             d.reject();
@@ -86,6 +87,8 @@ LoginService.service('Auth', ['$q', function ($q) {
                                     } else {
                                         access_token = data.getParam("access_token");
                                     }
+                                    window.localStorage.setItem("token", access_token);
+                                    $http.defaults.headers.common.Authorization = access_token;
                                     d.resolve({token:access_token, data:data});
                                 },
                                 error: function(error){
@@ -103,6 +106,8 @@ LoginService.service('Auth', ['$q', function ($q) {
                         var error = url.split("error=")[1];
                         if(access_token || error){
                             if(access_token){
+                                window.localStorage.setItem("token", access_token);
+                                $http.defaults.headers.common.Authorization = access_token;
                                 d.resolve({token:access_token, data:url.split("#")[1]});
                             } else if(error){
                                 d.reject({error:error, data:url.split("#")[1]});

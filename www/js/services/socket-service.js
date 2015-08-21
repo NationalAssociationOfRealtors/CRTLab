@@ -22,7 +22,6 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
         })
         me.ws.$open();
         ping();
-        return me.ws;
     }
 
     function ping(){
