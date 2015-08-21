@@ -1,12 +1,14 @@
 var TeamService = angular.module('TeamService', ['SocketService']);
 
-TeamService.service('Team', ['$http', 'Socket', function ($http, Socket){
+TeamService.service('Team', ['$http', 'Socket', '$q', function ($http, Socket, $q){
     this.users = [];
     var self = this;
     this.me = {};
     this.init = function(){
+        var d = $q.defer();
         $http.get(api_url+"/lab/me").then(function(response){
             self.me = response.data[0];
+            d.resolve(self.me);
         }).then(function(){
             $http.get(api_url+"/lab/team").then(function(response){
                 angular.copy(response.data[0], self.users);
@@ -29,5 +31,6 @@ TeamService.service('Team', ['$http', 'Socket', function ($http, Socket){
                 icon: "file://img/crt_logo.png",
             });
         });
+        return d.promise;
     }
 }]);

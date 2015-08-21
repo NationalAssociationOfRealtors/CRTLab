@@ -4,7 +4,7 @@ var socket_url = "ws://"+address+"/socket";
 var client_id = '55d603c0fb3d90000b009fe3';
 var api_token = null;
 
-var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'LabControllers']);
+var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'MQTTService', 'LabControllers']);
 
 CRTLab.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
@@ -21,7 +21,7 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Team', 'authService',  function($http, $rootScope, $interval, Region, Socket, Auth, Team, authService){
+CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Team', 'authService',  'MQTT', function($http, $rootScope, $interval, Region, Socket, Auth, Team, authService, MQTT){
     cordova.plugins.locationManager.isBluetoothEnabled()
         .then(function(isEnabled){
             console.log("Bluetooth isEnabled: " + isEnabled);
@@ -49,13 +49,16 @@ CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Tea
 
     function init(){
         Socket.init(socket_url, api_token, client_id);
-        Team.init();
-        $rootScope.$on('region:state', function(event, result){
-            if(Auth.user.in_office != result){
-                Auth.user.in_office = result;
-                Socket.emit('inoffice', {'result':result});
-            }
+        Team.init().then(function(me){
+            $rootScope.$on('region:state', function(event, result){
+                console.log(Team.me);
+                if(Team.me.in_office != result){
+                    Team.me.in_office = result;
+                    Socket.emit('inoffice', {'result':result});
+                }
+            });
         });
+
 
         $rootScope.$on('event:auth-loginRequired', function(event, data){
             login();
@@ -65,6 +68,8 @@ CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Tea
             uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
             id:'CRT Lab'
         });
+
+        MQTT.connect();
 
         //var in_office = false;
         //$interval(function(){
