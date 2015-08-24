@@ -18,9 +18,13 @@
     "bootstrap": "~3.3.5",
     "angular-http-auth": "~1.2.2",
     "ng-websocket": "~0.2.1",
-    "angular-route": "~1.4.4"
+    "angular-route": "~1.4.4",
+    "nvd3": "~1.8.1",
+    "angular-nvd3": "~0.1.1"
   },
   "resolutions": {
-    "angular": "~1.4.4"
+    "angular": "~1.4.4",
+    "nvd3": "~1.8.1",
+    "d3": "^3.4.4"
   }
 }

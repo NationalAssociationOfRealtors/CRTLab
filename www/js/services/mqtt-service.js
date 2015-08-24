@@ -1,6 +1,6 @@
 var MQTTService = angular.module('MQTTService', []);
 
-MQTTService.service('MQTT', [function (){
+MQTTService.service('MQTT', ['$rootScope', function ($rootScope){
     this.client = new Paho.MQTT.Client(address, 80, "/mqtt", "crtlabs");
     var me = this;
     var ret = null;
@@ -19,6 +19,7 @@ MQTTService.service('MQTT', [function (){
 
     this.client.onMessageArrived = function (message) {
         console.log(message.destinationName, ': ', message.payloadString);
+        $rootScope.$broadcast("mqtt:"+message.destinationName, message.payloadString);
     };
 
     var options = {
@@ -34,7 +35,7 @@ MQTTService.service('MQTT', [function (){
             message.destinationName = "inTopic";
             me.client.send(message);
         },
-        
+
         onFailure: function (message) {
             console.log("Connection failed: " + message.errorMessage);
             retry();

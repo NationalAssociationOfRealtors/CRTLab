@@ -8,6 +8,7 @@
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="bower_components/nvd3/build/nv.d3.css">
     <link rel="stylesheet" href="css/index.css">
     <script src="cordova.js"></script>
     <script src="bower_components/angular/angular.min.js"></script>
@@ -16,6 +17,9 @@
     <script src="bower_components/angular-http-auth/src/http-auth-interceptor.js"></script>
     <script src="bower_components/ng-websocket/ng-websocket.js"></script>
     <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="bower_components/nvd3/build/nv.d3.min.js"></script>
+    <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
     <script src="js/lib/mqtt31ws.js"></script>
     <script src="js/controller.js"></script>
     <script src="js/services/region-service.js"></script>
@@ -26,6 +30,32 @@
     <script src="js/index.js"></script>
 </head>
 <body>
-    <div ng-view></div>
+    <nav class="navbar navbar-default navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#lab-nav-collapse" aria-expanded="false">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#/index">
+                    CRTLabs
+                </a>
+                <p class="navbar-btn pull-right nav-inoffice">
+                    <a href="#/index" class="btn btn-success" ng-show="team.me.in_office">In Office</a>
+                    <a href="#/index" class="btn btn-danger" ng-show="!team.me.in_office">Out of Office</a>
+                </p>
+            </div>
+            <div class="collapse navbar-collapse" id="lab-nav-collapse">
+                <ul class="nav navbar-nav">
+                    <li><a data-toggle="collapse" data-target="#lab-nav-collapse" ng-href="#/sensors">Sensors</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container-fluid content">
+        <div ng-view></div>
+    </div>
 </body>
 </html>

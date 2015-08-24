@@ -1,33 +1,18 @@
 <div ng-controller="LabIndex">
-    <nav class="navbar navbar-default navbar-fixed-top">
-        <div class="container-fluid">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">
-                    CRTLabs
-                </a>
-                <p class="navbar-btn pull-right nav-inoffice">
-                    <a href="#" class="btn btn-success" ng-show="team.me.in_office">In Office</a>
-                    <a href="#" class="btn btn-danger" ng-show="!team.me.in_office">Out of Office</a>
-                </p>
-            </div>
-        </div>
-    </nav>
-    <div class="container-fluid content">
-        <h3>Team</h3>
-        <ul class="list-group">
-            <li ng-repeat="user in team.users" class="list-group-item">
-                <a ng-href="#/user/{{user._id}}">{{user.name}}</a>
-                <span class="label label-success pull-right" ng-show="user.in_office">In</span>
-                <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
-            </li>
-        </ul>
-        <h3>Punch-clock</h3>
-        <ul class="list-group">
-            <li ng-repeat="time in team.me.times" class="list-group-item">
-                {{time.time | date:'MM/dd/yyyy @ h:mma'}}
-                <span class="label label-success pull-right" ng-show="time.value">In</span>
-                <span class="label label-danger pull-right" ng-show="!time.value">Out</span>
-            </li>
-        </ul>
-    </div>
+    <h3>Team</h3>
+    <ul class="list-group">
+        <li ng-repeat="user in team.users" class="list-group-item">
+            <a ng-href="#/user/{{user._id}}">{{user.name}}</a>
+            <span class="label label-success pull-right" ng-show="user.in_office">In</span>
+            <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
+        </li>
+    </ul>
+    <h3>Punch-clock</h3>
+    <ul class="list-group">
+        <li ng-repeat="time in team.me.times" class="list-group-item">
+            {{time.time | date:'MM/dd/yyyy @ h:mma'}}
+            <span class="label label-success pull-right" ng-show="time.value">In</span>
+            <span class="label label-danger pull-right" ng-show="!time.value">Out</span>
+        </li>
+    </ul>
 </div>

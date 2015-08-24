@@ -1,1 +1,9 @@
-{{user._id}}
+<h1>{{user.name}}</h1>
+<h3>Punch-clock</h3>
+<ul class="list-group">
+    <li ng-repeat="time in user.times" class="list-group-item">
+        {{time.time | date:'MM/dd/yyyy @ h:mma'}}
+        <span class="label label-success pull-right" ng-show="time.value">In</span>
+        <span class="label label-danger pull-right" ng-show="!time.value">Out</span>
+    </li>
+</ul>

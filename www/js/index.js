@@ -4,7 +4,7 @@ var socket_url = "ws://"+address+"/socket";
 var client_id = '55d603c0fb3d90000b009fe3';
 var api_token = null;
 
-var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'MQTTService', 'LabControllers']);
+var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'MQTTService', 'nvd3', 'LabControllers']);
 
 CRTLab.config(['$routeProvider', function($routeProvider) {
     $routeProvider.
@@ -15,6 +15,10 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         when('/user/:userId', {
             templateUrl: 'partials/user.html',
             controller: 'LabUser',
+        }).
+        when('/sensors', {
+            templateUrl: 'partials/sensors.html',
+            controller: 'LabSensors',
         }).
         otherwise({
             redirectTo: '/index'
@@ -31,6 +35,8 @@ CRTLab.run(['$http', '$rootScope', '$interval', 'Region', 'Socket', 'Auth', 'Tea
         })
         .fail(console.error)
         .done();
+
+    $rootScope.team = Team;
 
     Auth.init({
         url: api_url+'/auth/authorize',
