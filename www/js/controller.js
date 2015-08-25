@@ -13,7 +13,7 @@ LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Team', function
 }]);
 
 LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'MQTT', function($scope, $routeParams, MQTT){
-    $scope.data = [{ values: [], key: 'Light' }, { values: [], key: 'Pot' }];
+    $scope.data = [{ values: [[]], key: 'Light' }, { values: [[]], key: 'Pot' }];
     $scope.options = {
         chart:{
             type: 'lineChart',
@@ -33,7 +33,8 @@ LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'MQTT', funct
                     var da = new Date(d);
                     return d3.time.format('%H:%M:%S')(da);
                 }
-            }
+            },
+            noData: "Loading..."
         }
     }
     $scope.$on('mqtt:/node/light', function(event, data){

@@ -1,7 +1,7 @@
 var MQTTService = angular.module('MQTTService', []);
 
 MQTTService.service('MQTT', ['$rootScope', function ($rootScope){
-    this.client = new Paho.MQTT.Client(address, 80, "/mqtt", "crtlabs");
+    this.client = new Paho.MQTT.Client(mqtt_url, "crtlabs");
     var me = this;
     var ret = null;
 
