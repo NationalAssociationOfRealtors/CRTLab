@@ -13,7 +13,9 @@ LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Team', function
 }]);
 
 LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'MQTT', function($scope, $routeParams, MQTT){
-    $scope.data = [{ values: [[]], key: 'Light' }, { values: [[]], key: 'Pot' }];
+    $scope.data = {};
+    $scope.data.light = [{ values: [], key: 'Light' }, { values: [], key: 'Pot' }];
+    $scope.data.temp = [{ values: [], key: 'Temperature' }, { values: [], key: 'Humidity' }];
     $scope.options = {
         chart:{
             type: 'lineChart',
@@ -37,13 +39,23 @@ LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'MQTT', funct
             noData: "Loading..."
         }
     }
+
     $scope.$on('mqtt:/node/light', function(event, data){
         console.log(data);
-        if ($scope.data[0].values.length > 50) $scope.data[0].values.shift();
-        $scope.data[0].values.push({x:new Date(), y:data});
+        if ($scope.data.light[0].values.length > 50) $scope.data.light[0].values.shift();
+        $scope.data.light[0].values.push({x:new Date(), y:data});
     });
     $scope.$on('mqtt:/node/pot', function(event, data){
-        if ($scope.data[1].values.length > 50) $scope.data[1].values.shift();
-        $scope.data[1].values.push({x:new Date(), y:data});
+        if ($scope.data.light[1].values.length > 50) $scope.data.light[1].values.shift();
+        $scope.data.light[1].values.push({x:new Date(), y:data});
+    });
+    $scope.$on('mqtt:/node/humidity', function(event, data){
+        if ($scope.data.temp[1].values.length > 50) $scope.data.temp[1].values.shift();
+        $scope.data.temp[1].values.push({x:new Date(), y:data});
+    });
+    $scope.$on('mqtt:/node/temperature', function(event, data){
+        console.log(data);
+        if ($scope.data.temp[0].values.length > 50) $scope.data.temp[0].values.shift();
+        $scope.data.temp[0].values.push({x:new Date(), y:data});
     });
 }]);
