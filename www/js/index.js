@@ -1,8 +1,8 @@
-var address = "192.168.1.174";
+var address = "crtlabsdev.realtors.org";
 var api_url = "https://"+address;
 var socket_url = "wss://"+address+"/socket";
 var mqtt_url = "wss://"+address+"/mqtt";
-var client_id = '55d603c0fb3d90000b009fe3';
+var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
 
 var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'MQTTService', 'nvd3', 'ngTouch', 'LabControllers']);
