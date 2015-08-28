@@ -19,7 +19,10 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
         me.ws.$on('invalid_access', function(data){
             me.ws.$close();
             $rootScope.$broadcast('event:auth-loginRequired', data);
-        })
+        });
+        me.ws.$on('node', function(data){
+            console.log(data);
+        });
         me.ws.$open();
         ping();
     }
@@ -29,7 +32,7 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
             if(me.is_open()){
                 me.emit('ping', {});
             }
-        }, 45000);
+        }, 1000);
     }
 
     this.is_open = function(){
