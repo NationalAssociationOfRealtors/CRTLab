@@ -3,7 +3,7 @@
 <head>
     <title>CRTLab</title>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: http://* ws://* 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self' data: gap: https://* wss://* 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *">
     <meta name="format-detection" content="telephone=no">
     <meta name="msapplication-tap-highlight" content="no">
     <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -21,13 +21,12 @@
     <script src="bower_components/nvd3/build/nv.d3.min.js"></script>
     <script src="bower_components/angular-nvd3/dist/angular-nvd3.js"></script>
     <script src="bower_components/angular-touch/angular-touch.min.js"></script>
-    <script src="js/lib/mqtt31ws.js"></script>
     <script src="js/controller.js"></script>
     <script src="js/services/region-service.js"></script>
     <script src="js/services/socket-service.js"></script>
     <script src="js/services/login-service.js"></script>
     <script src="js/services/team-service.js"></script>
-    <script src="js/services/mqtt-service.js"></script>
+    <script src="js/services/node-service.js"></script>
     <script src="js/index.js"></script>
 </head>
 <body ng-swipe-left="load_next($event)" ng-swipe-right="load_previous($event)">

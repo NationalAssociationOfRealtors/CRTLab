@@ -2,6 +2,7 @@ var SocketService = angular.module('SocketService', ['ngWebsocket']);
 
 SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScope, $websocket){
     this.ws = null;
+    this.data = {};
     var me = this;
     var pinger = null;
     this.init = function(url, token, client_id){
@@ -19,9 +20,6 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
         me.ws.$on('invalid_access', function(data){
             me.ws.$close();
             $rootScope.$broadcast('event:auth-loginRequired', data);
-        });
-        me.ws.$on('node', function(data){
-            console.log(data);
         });
         me.ws.$open();
         ping();

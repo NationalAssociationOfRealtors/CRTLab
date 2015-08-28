@@ -1,11 +1,10 @@
-var address = "192.168.1.3";
-var api_url = "http://"+address;
-var socket_url = "ws://"+address+"/socket";
-var mqtt_url = "ws://"+address+"/mqtt";
-var client_id = "55dfc9c9d11dc5000bc81d11";
+var uri = "crtlabsdev.realtors.org";
+var api_url = "https://"+uri;
+var socket_url = "wss://"+uri+"/socket";
+var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
 
-var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'MQTTService', 'nvd3', 'ngTouch', 'LabControllers']);
+var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'nvd3', 'ngTouch', 'NodeService', 'LabControllers']);
 
 var views = {
     index:{
@@ -38,7 +37,7 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Team', 'authService',  'MQTT', function($http, $rootScope, $interval, $location, Region, Socket, Auth, Team, authService, MQTT){
+CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Team', 'authService', 'Node', function($http, $rootScope, $interval, $location, Region, Socket, Auth, Team, authService, Node){
     cordova.plugins.locationManager.isBluetoothEnabled()
         .then(function(isEnabled){
             console.log("Bluetooth isEnabled: " + isEnabled);
@@ -105,7 +104,7 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
             login();
         });
 
-        MQTT.connect();
+        Node.init();
 
     }
 

@@ -12,10 +12,10 @@ LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Team', function
     }
 }]);
 
-LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'MQTT', function($scope, $routeParams, MQTT){
+LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', function($scope, $routeParams, Node){
     $scope.data = {};
-    $scope.data.light = [{ values: MQTT.get_data('/node/light'), key: 'Light' }, { values: MQTT.get_data('/node/pot'), key: 'Pot' }];
-    $scope.data.temp = [{ values: MQTT.get_data('/node/temperature'), key: 'Temperature' }, { values: MQTT.get_data('/node/humidity'), key: 'Humidity' }];
+    $scope.data.light = [{ values: Node.get_data(null, 'light'), key: 'Light' }, { values: Node.get_data(null, 'pot'), key: 'Pot' }];
+    $scope.data.temp = [{ values: Node.get_data(null, 'temperature'), key: 'Temperature' }, { values: Node.get_data(null, 'humidity'), key: 'Humidity' }];
     $scope.options = {
         chart:{
             type: 'lineChart',
