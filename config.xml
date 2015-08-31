@@ -23,10 +23,19 @@
         <allow-intent href="itms:*" />
         <allow-intent href="itms-apps:*" />
     </platform>
-    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <preference name="StatusBarOverlaysWebView" value="false" />
+    <preference name="StatusBarBackgroundColor" value="#000000" />
+    <preference name="StatusBarStyle" value="blacktranslucent" />
+    <feature name="Console">
+        <param name="ios-package" value="LMVLogger" />
+    </feature>
+    <feature name="InAppBrowser">
+        <param name="ios-package" value="CDVInAppBrowser" />
+    </feature>
     <plugin name="com.unarin.cordova.beacon" spec="../cordova-plugin-ibeacon" />
     <plugin name="de.appplant.cordova.plugin.local-notification" spec="../cordova-plugin-local-notifications" />
-    <plugin name="cordova-plugin-inappbrowser" spec="1.0.1" />
-    <plugin name="org.apache.cordova.statusbar" spec="^0.1.10" />
-    <preference name="StatusBarOverlaysWebView" value="false" />
+    <plugin name="cordova-plugin-whitelist" spec="1" />
+    <plugin name="cordova-plugin-inappbrowser" spec="~1.0.1" />
+    <plugin name="cordova-plugin-console" />
+    <plugin name="cordova-plugin-statusbar" spec="~1.0.1" />
 </widget>

@@ -68,10 +68,11 @@ LoginService.service('Auth', ['$q', '$http', function ($q, $http) {
         // open Cordova inapp-browser with login url
         if(!me.open){
             me.open = true;
-            var loginWindow = cordova.InAppBrowser.open(login_url, '_self', 'location=no');
-            $(loginWindow).on('loadstart', function(e) {
-                var url = e.originalEvent.url;
-                console.log(url);
+            var loginWindow = cordova.InAppBrowser.open(login_url, '_blank', 'location=no');
+            loginWindow.addEventListener('loadstart', function(e) {
+                console.log(e);
+                var url = e.url;
+
                 // if authorization code method check for code/error in url param
                 if(me.cfg.response_type == "code"){
                     url = url.split("#")[0];
