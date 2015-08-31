@@ -30,7 +30,17 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
             if(me.is_open()){
                 me.emit('ping', {});
             }
-        }, 1000);
+        }, 45000);
+    }
+
+    this.pause = function(e){
+        clearInterval(pinger);
+        me.ws.$close();
+    }
+
+    this.resume = function(e){
+        me.ws.$open();
+        ping();
     }
 
     this.is_open = function(){

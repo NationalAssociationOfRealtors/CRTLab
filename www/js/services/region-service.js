@@ -35,30 +35,46 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
     delegate.didRangeBeaconsInRegion = onDidRangeBeaconsInRegion;
 
     this.init = function(uuid){
-        start_monitoring(uuid, onError);
-        start_ranging(uuid, onError);
-    }
-
-
-    function start_monitoring(uuid, errorCallback){
-        // Create a region object.
-        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(
+        me.region = new cordova.plugins.locationManager.BeaconRegion(
             uuid.id,
             uuid.uuid);
 
-        // Start monitoring.
-        cordova.plugins.locationManager.startMonitoringForRegion(beaconRegion)
-            .fail(errorCallback)
+        start_monitoring();
+        start_ranging();
+    }
+
+    this.pause = function(e){
+        stop_monitoring();
+        stop_ranging();
+    }
+
+    this.resume = function(e){
+        start_monitoring();
+        start_ranging();
+    }
+
+
+    function start_monitoring(errorCallback){
+        cordova.plugins.locationManager.startMonitoringForRegion(me.region)
+            .fail(onError)
             .done();
     }
 
-    function start_ranging(uuid, errorCallback){
-        var beaconRegion = new cordova.plugins.locationManager.BeaconRegion(
-            uuid.id,
-            uuid.uuid);
+    function start_ranging(errorCallback){
+        cordova.plugins.locationManager.startRangingBeaconsInRegion(me.region)
+			.fail(onError)
+			.done();
+    }
 
-        cordova.plugins.locationManager.startRangingBeaconsInRegion(beaconRegion)
-			.fail(errorCallback)
+    function stop_monitoring(errorCallback){
+        cordova.plugins.locationManager.stopMonitoringForRegion(me.region)
+            .fail(onError)
+            .done();
+    }
+
+    function stop_ranging(errorCallback){
+        cordova.plugins.locationManager.stopRangingBeaconsInRegion(me.region)
+			.fail(onError)
 			.done();
     }
 

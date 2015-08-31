@@ -9,12 +9,16 @@ var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-in
 var views = {
     index:{
         next:'sensors',
-        previous:'sensors'
+        previous:'beacons'
     },
     sensors:{
-        next:'index',
+        next:'beacons',
         previous:'index'
-    }
+    },
+    beacons:{
+        next:'index',
+        previous:'sensors'
+    },
 }
 var current_view = 'index'
 
@@ -31,6 +35,10 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         when('/sensors', {
             templateUrl: 'partials/sensors.html',
             controller: 'LabSensors',
+        }).
+        when('/beacons', {
+            templateUrl: 'partials/beacons.html',
+            controller: 'LabBeacons',
         }).
         otherwise({
             redirectTo: '/index'
@@ -106,6 +114,10 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
 
         Node.init();
 
+        document.addEventListener('pause', pause, false);
+        document.addEventListener('resign', pause, false);
+        document.addEventListener('resume', resume, false);
+
     }
 
     function login(){
@@ -118,7 +130,19 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
         });
     }
 
-}])
+    function pause(e){
+        Socket.pause();
+        Region.pause();
+        console.log("pausing...");
+    }
+
+    function resume(e){
+        Socket.resume();
+        Region.resume();
+        console.log("resuming...");
+    }
+
+}]);
 
 var app = (function(){
     var app = {};

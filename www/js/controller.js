@@ -1,6 +1,7 @@
 var LabControllers = angular.module('LabControllers', []);
 
-LabControllers.controller('LabIndex', ['$scope', 'Team', function($scope, Team){
+LabControllers.controller('LabIndex', ['$scope', 'Team', 'Region', function($scope, Team, Region){
+    $scope.region = Region;
     $scope.team = Team;
 }]);
 
@@ -10,6 +11,10 @@ LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Team', function
             $scope.user = Team.users[i];
         }
     }
+}]);
+
+LabControllers.controller('LabBeacons', ['$scope', 'Region', function($scope, Region){
+    $scope.region = Region;
 }]);
 
 LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', function($scope, $routeParams, Node){

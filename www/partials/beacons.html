@@ -1,0 +1,7 @@
+<h3>Beacons</h3>
+<ul class="list-group">
+    <li ng-repeat="beacon in region.beacons" class="list-group-item">
+        {{beacon.major}}:{{beacon.minor}}
+        <span class="badge">{{beacon.proximity}}</span>
+    </li>
+</ul>
