@@ -12,12 +12,16 @@ var views = {
         previous:'beacons'
     },
     sensors:{
-        next:'beacons',
+        next:'historic',
         previous:'index'
+    },
+    historic:{
+        next:'beacons',
+        previous:'sensors'
     },
     beacons:{
         next:'index',
-        previous:'sensors'
+        previous:'historic'
     },
 }
 var current_view = 'index'
@@ -35,6 +39,10 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         when('/sensors', {
             templateUrl: 'partials/sensors.html',
             controller: 'LabSensors',
+        }).
+        when('/historic', {
+            templateUrl: 'partials/historic.html',
+            controller: 'LabSensorsHistoric',
         }).
         when('/beacons', {
             templateUrl: 'partials/beacons.html',

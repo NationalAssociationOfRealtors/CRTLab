@@ -45,3 +45,35 @@ LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', funct
         }
     }
 }]);
+
+LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', function($scope, Node){
+    $scope.data = {};
+    $scope.data.light = [{ values: Node.get_historic(null, 'light'), key: 'Light' }, { values: Node.get_historic(null, 'pot'), key: 'Pot' }];
+    $scope.data.temp = [{ values: Node.get_historic(null, 'temperature'), key: 'Temperature' }, { values: Node.get_historic(null, 'humidity'), key: 'Humidity' }];
+    $scope.options = {
+        chart:{
+            type: 'lineChart',
+            height: 180,
+            margin : {
+                top: 35,
+                right: 25,
+                bottom: 40,
+                left: 30
+            },
+            x: function(d){
+                var f = d3.time.format('%Y-%m-%dT%H:%M:%SZ')
+                return f.parse(d.time);
+            },
+            y: function(d){ return d.value; },
+            useInteractiveGuideline: true,
+            transitionDuration:1000,
+            xAxis: {
+                tickFormat: function(d){
+                    var da = new Date(d);
+                    return d3.time.format('%Y-%m-%d %H:%M')(da);
+                }
+            },
+            noData: "Loading..."
+        }
+    }
+}]);

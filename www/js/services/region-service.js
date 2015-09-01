@@ -15,7 +15,6 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
         $rootScope.$apply(function(){
             me.beacons = result.beacons;
         });
-        console.log(result);
         $rootScope.$broadcast('region:beacons', result);
     }
 
