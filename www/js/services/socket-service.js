@@ -5,6 +5,7 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
     this.data = {};
     var me = this;
     var pinger = null;
+    var paused = false;
     this.init = function(url, token, client_id){
         me.ws = $websocket.$new({
             url:url+"?token="+token+"&client_id="+client_id,
@@ -16,6 +17,14 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
         });
         me.ws.$on('$open', function(data){
             console.log("WS is open");
+            if(paused){
+                setTimeout(function(){
+                    me.pause();
+                }, 10000);
+            }
+        });
+        me.ws.$on('$close', function(data){
+            console.log("WS is closed");
         });
         me.ws.$on('invalid_access', function(data){
             me.ws.$close();
@@ -26,6 +35,7 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
     }
 
     function ping(){
+        clearInterval(pinger);
         pinger = setInterval(function(){
             if(me.is_open()){
                 me.emit('ping', {});
@@ -34,11 +44,13 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
     }
 
     this.pause = function(e){
+        paused = true;
         clearInterval(pinger);
         me.ws.$close();
     }
 
     this.resume = function(e){
+        paused = false;
         me.ws.$open();
         ping();
     }
@@ -59,6 +71,7 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
     this.emit = function(event, data){
         console.log("emitting: "+event);
         console.log(data);
+        if(paused && !me.is_open()) me.ws.$open();
         me.ws.$emit(event, data);
     }
 }]);

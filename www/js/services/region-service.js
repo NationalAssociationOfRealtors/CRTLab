@@ -43,12 +43,12 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
     }
 
     this.pause = function(e){
-        stop_monitoring();
+        //stop_monitoring();
         stop_ranging();
     }
 
     this.resume = function(e){
-        start_monitoring();
+        //start_monitoring();
         start_ranging();
     }
 
