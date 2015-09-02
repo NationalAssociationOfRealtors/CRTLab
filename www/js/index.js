@@ -1,5 +1,6 @@
+var API_VERSION = "v1.0";
 var uri = "crtlabsdev.realtors.org";
-var api_url = "https://"+uri;
+var api_url = "https://"+uri+"/api/"+API_VERSION;
 var socket_url = "wss://"+uri+"/socket";
 var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
