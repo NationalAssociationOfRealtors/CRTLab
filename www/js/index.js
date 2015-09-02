@@ -1,6 +1,7 @@
 var API_VERSION = "v1.0";
 var uri = "crtlabsdev.realtors.org";
 var api_url = "https://"+uri+"/api/"+API_VERSION;
+var auth_url = "https://"+uri;
 var socket_url = "wss://"+uri+"/socket";
 var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
@@ -86,11 +87,11 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
     }
 
     Auth.init({
-        url: api_url+'/auth/authorize',
+        url: auth_url+'/auth/authorize',
         response_type: 'token',
         client_id: client_id,
-        redirect_uri: api_url+"/",
-        other_params: {scope: 'inoffice'}
+        redirect_uri: auth_url+"/",
+        other_params: {scope: 'inoffice analytics'}
     });
 
     Auth.get_token().then(function(token){
