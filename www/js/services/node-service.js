@@ -43,7 +43,6 @@ NodeService.service('Node', ['$http', '$rootScope', 'Socket', '$q', function ($h
             $http.get(api_url+"/node/"+node+"/sensors").then(function(resp){
                 for(var i in resp.data[0]){
                     angular.copy(resp.data[0][i], self.nodes[node]['historic'][i]);
-                    console.log(self.nodes[node]['historic'][i]);
                 }
                 loading_historic = false;
             });

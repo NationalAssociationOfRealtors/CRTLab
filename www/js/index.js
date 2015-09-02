@@ -1,4 +1,5 @@
 var API_VERSION = "v1.0";
+var BEACON_UUID = "C3CE6B3E-E801-4E7F-8F05-8A83D9B8A183";
 var uri = "crtlabsdev.realtors.org";
 var api_url = "https://"+uri+"/api/"+API_VERSION;
 var auth_url = "https://"+uri;
@@ -6,7 +7,7 @@ var socket_url = "wss://"+uri+"/socket";
 var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
 
-var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'TeamService', 'nvd3', 'ngTouch', 'NodeService', 'LabControllers']);
+var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'LabService', 'nvd3', 'ngTouch', 'NodeService', 'LabControllers']);
 
 var views = {
     index:{
@@ -55,7 +56,7 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Team', 'authService', 'Node', function($http, $rootScope, $interval, $location, Region, Socket, Auth, Team, authService, Node){
+CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Lab', 'authService', 'Node', function($http, $rootScope, $interval, $location, Region, Socket, Auth, Lab, authService, Node){
     cordova.plugins.locationManager.isBluetoothEnabled()
         .then(function(isEnabled){
             console.log("Bluetooth isEnabled: " + isEnabled);
@@ -66,7 +67,7 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
         .fail(console.error)
         .done();
 
-    $rootScope.team = Team;
+    $rootScope.lab = Lab;
 
     $rootScope.$on("$locationChangeStart", function(event, next, current){
         console.log(next);
@@ -103,18 +104,16 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
 
     function init(){
         Socket.init(socket_url, api_token, client_id);
-        Team.init().then(function(me){
+        Lab.init().then(function(me){
             $rootScope.$on('region:state', function(event, result){
-                console.log(Team.me);
-                console.log(result);
-                if(Team.me.in_office != result){
-                    Team.me.in_office = result;
+                if(Lab.me.in_office != result){
+                    Lab.me.in_office = result;
                     Socket.emit('inoffice', {'result':result});
                 }
             });
             Region.init({
-                uuid:'B9407F30-F5F8-466E-AFF9-25556B57FE6D',
-                id:'CRT Lab'
+                uuid:BEACON_UUID,
+                id:'CRTLabs'
             });
         });
 

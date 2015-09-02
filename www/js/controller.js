@@ -1,14 +1,14 @@
 var LabControllers = angular.module('LabControllers', []);
 
-LabControllers.controller('LabIndex', ['$scope', 'Team', 'Region', function($scope, Team, Region){
+LabControllers.controller('LabIndex', ['$scope', 'Lab', 'Region', function($scope, Lab, Region){
     $scope.region = Region;
-    $scope.team = Team;
+    $scope.lab = Lab;
 }]);
 
-LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Team', function($scope, $routeParams, Team){
-    for(var i in Team.users){
-        if(Team.users[i]._id == $routeParams.userId){
-            $scope.user = Team.users[i];
+LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Lab', function($scope, $routeParams, Lab){
+    for(var i in Lab.users){
+        if(Lab.users[i]._id == $routeParams.userId){
+            $scope.user = Lab.users[i];
         }
     }
 }]);
@@ -46,10 +46,11 @@ LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', funct
     }
 }]);
 
-LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', function($scope, Node){
+LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', 'Lab', function($scope, Node, Lab){
     $scope.data = {};
     $scope.data.light = [{ values: Node.get_historic(null, 'light'), key: 'Light' }, { values: Node.get_historic(null, 'pot'), key: 'Pot' }];
     $scope.data.temp = [{ values: Node.get_historic(null, 'temperature'), key: 'Temperature' }, { values: Node.get_historic(null, 'humidity'), key: 'Humidity' }];
+    $scope.data.power_usage = Lab.get_power_usage();
     $scope.options = {
         chart:{
             type: 'lineChart',
@@ -62,9 +63,9 @@ LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', function($sco
             },
             x: function(d){
                 var f = d3.time.format('%Y-%m-%dT%H:%M:%SZ')
-                return f.parse(d.time);
+                return f.parse(d.time ? d.time : d[0]);
             },
-            y: function(d){ return d.value; },
+            y: function(d){ return d.value ? d.value : d[1]; },
             useInteractiveGuideline: true,
             transitionDuration:1000,
             xAxis: {

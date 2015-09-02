@@ -1,9 +1,10 @@
-var TeamService = angular.module('TeamService', ['SocketService']);
+var LabService = angular.module('LabService', ['SocketService']);
 
-TeamService.service('Team', ['$http', 'Socket', '$q', function ($http, Socket, $q){
+LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q){
     this.users = [];
     var self = this;
     this.me = {};
+    this.power_usage = [{values:[], key:'test'}];
     this.init = function(){
         var d = $q.defer();
         $http.get(api_url+"/lab/me").then(function(response){
@@ -32,5 +33,17 @@ TeamService.service('Team', ['$http', 'Socket', '$q', function ($http, Socket, $
             });
         });
         return d.promise;
+    }
+
+    this.get_power_usage = function(){
+        $http.get(api_url+"/lab/ups").then(function(resp){
+            self.power_usage.splice(0,self.power_usage.length)
+            for(var i in resp.data[0]){
+                var a = {values:resp.data[0][i], key:i};
+                self.power_usage.push(a);
+            }
+            console.log(self.power_usage);
+        });
+        return self.power_usage;
     }
 }]);
