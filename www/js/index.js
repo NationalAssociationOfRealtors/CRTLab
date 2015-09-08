@@ -56,16 +56,20 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Lab', 'authService', 'Node', function($http, $rootScope, $interval, $location, Region, Socket, Auth, Lab, authService, Node){
-    cordova.plugins.locationManager.isBluetoothEnabled()
-        .then(function(isEnabled){
-            console.log("Bluetooth isEnabled: " + isEnabled);
-            if (!isEnabled) {
-                cordova.plugins.locationManager.enableBluetooth();
-            }
-        })
-        .fail(console.error)
-        .done();
+CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Lab', 'authService', 'Node', function($http, $window, $rootScope, $interval, $location, Region, Socket, Auth, Lab, authService, Node){
+    try{
+        cordova.plugins.locationManager.isBluetoothEnabled()
+            .then(function(isEnabled){
+                console.log("Bluetooth isEnabled: " + isEnabled);
+                if (!isEnabled) {
+                    cordova.plugins.locationManager.enableBluetooth();
+                }
+            })
+            .fail(console.error)
+            .done();
+    }catch(e){
+        console.error(e);
+    }
 
     $rootScope.lab = Lab;
 
@@ -86,6 +90,19 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
         console.log(views[current_view].previous);
         $location.url("/"+views[current_view].previous);
     }
+
+    $window.addEventListener("message", function(data){
+        if(data.data.access_token){
+            api_token = data.data.access_token;
+            Auth.set_token(data.data.access_token);
+            init();
+        }
+    });
+
+    $rootScope.$on('event:auth-loginRequired', function(event, data){
+        console.log("login required!");
+        login();
+    });
 
     Auth.init({
         url: auth_url+'/auth/authorize',
@@ -111,14 +128,14 @@ CRTLab.run(['$http', '$rootScope', '$interval', '$location', 'Region', 'Socket',
                     Socket.emit('inoffice', {'result':result});
                 }
             });
-            Region.init({
-                uuid:BEACON_UUID,
-                id:'CRTLabs'
-            });
-        });
-
-        $rootScope.$on('event:auth-loginRequired', function(event, data){
-            login();
+            try{
+                Region.init({
+                    uuid:BEACON_UUID,
+                    id:'CRTLabs'
+                });
+            }catch(e){
+                console.error(e);
+            }
         });
 
         Node.init();
@@ -157,7 +174,11 @@ var app = (function(){
     var app = {};
 
     app.initialize = function(){
-        document.addEventListener('deviceready', onDeviceReady, false);
+        if (navigator.userAgent.match(/(iPhone|iPod|iPad|Android|BlackBerry)/)) {
+            document.addEventListener("deviceready", onDeviceReady, false);
+        }else{
+            onDeviceReady();
+        }
     };
 
     function onDeviceReady(){
@@ -168,4 +189,6 @@ var app = (function(){
 
 })();
 
-app.initialize();
+$(document).ready(function(){
+    app.initialize();
+});

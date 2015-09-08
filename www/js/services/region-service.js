@@ -22,18 +22,18 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
         console.log('Monitoring beacons did fail: ' + errorMessage);
     }
 
-    // Request permission from user to access location info.
-    cordova.plugins.locationManager.requestAlwaysAuthorization();
-
-    // Create delegate object that holds beacon callback functions.
-    var delegate = new cordova.plugins.locationManager.Delegate();
-    cordova.plugins.locationManager.setDelegate(delegate);
-
-    // Set delegate functions.
-    delegate.didDetermineStateForRegion = onDidDetermineStateForRegion;
-    delegate.didRangeBeaconsInRegion = onDidRangeBeaconsInRegion;
-
     this.init = function(uuid){
+        // Request permission from user to access location info.
+        cordova.plugins.locationManager.requestAlwaysAuthorization();
+
+        // Create delegate object that holds beacon callback functions.
+        var delegate = new cordova.plugins.locationManager.Delegate();
+        cordova.plugins.locationManager.setDelegate(delegate);
+
+        // Set delegate functions.
+        delegate.didDetermineStateForRegion = onDidDetermineStateForRegion;
+        delegate.didRangeBeaconsInRegion = onDidRangeBeaconsInRegion;
+        
         me.region = new cordova.plugins.locationManager.BeaconRegion(
             uuid.id,
             uuid.uuid);
