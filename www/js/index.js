@@ -120,6 +120,7 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region'
     });
 
     function init(){
+        console.log("Init App");
         Socket.init(socket_url, api_token, client_id);
         Lab.init().then(function(me){
             $rootScope.$on('region:state', function(event, result){
@@ -157,14 +158,16 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region'
     }
 
     function pause(e){
+        console.log("pausing...");
         Socket.pause();
         Region.pause();
-        console.log("pausing...");
+        Node.pause();
     }
 
     function resume(e){
         Socket.resume();
         Region.resume();
+        Node.resume();
         console.log("resuming...");
     }
 

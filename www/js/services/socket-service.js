@@ -50,6 +50,7 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
     }
 
     this.resume = function(e){
+        console.log("Socket Resuming");
         paused = false;
         me.ws.$open();
         ping();

@@ -6,6 +6,7 @@ LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q)
     this.me = {};
     this.power_usage = [{values:[], key:'test'}];
     this.weather_data = [{values:[], key:'test'}];
+    this.energy_usage = [{values:[], key:'test'}];
     this.init = function(){
         var d = $q.defer();
         $http.get(api_url+"/lab/me").then(function(response){
@@ -34,7 +35,7 @@ LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q)
             });
         });
         return d.promise;
-    }
+    };
 
     this.get_power_usage = function(){
         $http.get(api_url+"/lab/ups").then(function(resp){
@@ -46,7 +47,7 @@ LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q)
             console.log(self.power_usage);
         });
         return self.power_usage;
-    }
+    };
 
     this.get_weather_data = function(){
         $http.get(api_url+"/lab/weather").then(function(resp){
@@ -58,5 +59,17 @@ LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q)
             console.log(self.weather_data);
         });
         return self.weather_data;
-    }
+    };
+
+    this.get_energy_usage = function(){
+        $http.get(api_url+"/lab/energy").then(function(resp){
+            self.energy_usage.splice(0,self.energy_usage.length)
+            for(var i in resp.data[0]){
+                var a = {values:resp.data[0][i], key:i};
+                self.energy_usage.push(a);
+            }
+            console.log(self.energy_usage);
+        });
+        return self.energy_usage;
+    };
 }]);

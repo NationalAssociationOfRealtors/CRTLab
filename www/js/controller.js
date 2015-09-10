@@ -52,6 +52,7 @@ LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', 'Lab', functi
     $scope.data.temp = [{ values: Node.get_historic(null, 'temperature'), key: 'Temperature' }, { values: Node.get_historic(null, 'humidity'), key: 'Humidity' }];
     $scope.data.power_usage = Lab.get_power_usage();
     $scope.data.weather_data = Lab.get_weather_data();
+    $scope.data.energy_usage = Lab.get_energy_usage();
     $scope.options = {
         chart:{
             type: 'lineChart',
