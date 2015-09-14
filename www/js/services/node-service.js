@@ -27,13 +27,16 @@ NodeService.service('Node', ['$http', '$rootScope', 'Socket', '$q', function ($h
 
     function fill_data(node, measurement){
         var k = node+":"+measurement;
+        console.log("Filling: ", node, measurement);
         if(!timers[k]){
             timers[k] = setInterval(function(){
                 var v = self.nodes[node]['realtime'][measurement];
                 if(v.length > 50) v.shift();
                 var d = self.nodes[node]['last'][measurement];
-                v.push(d);
-                console.log("Appending: ", d, node, measurement);
+                $rootScope.$apply(function(){
+                    v.push(d);
+                });
+                console.log(v);
             }, 1000);
         };
     };
@@ -51,7 +54,7 @@ NodeService.service('Node', ['$http', '$rootScope', 'Socket', '$q', function ($h
             fill_data(t.split(":")[0], t.split(":")[1]);
         }
     };
-    
+
     this.get_data = function(node, measurement){
         if(!node){
             for(var i in self.nodes){
