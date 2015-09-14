@@ -33,13 +33,20 @@ RegionService.service('Region', ['$rootScope', function ($rootScope) {
         // Set delegate functions.
         delegate.didDetermineStateForRegion = onDidDetermineStateForRegion;
         delegate.didRangeBeaconsInRegion = onDidRangeBeaconsInRegion;
-        
+
         me.region = new cordova.plugins.locationManager.BeaconRegion(
             uuid.id,
             uuid.uuid);
 
         start_monitoring();
         start_ranging();
+
+        setTimeout(function(){
+            console.log("Beacons:", me.beacons.length);
+            if(!me.beacons.length){
+                $rootScope.$broadcast('region:state', false);
+            }
+        }, 5000);
     }
 
     this.pause = function(e){
