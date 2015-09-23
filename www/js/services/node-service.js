@@ -33,10 +33,8 @@ NodeService.service('Node', ['$http', '$rootScope', 'Socket', '$q', function ($h
                 var v = self.nodes[node]['realtime'][measurement];
                 if(v.length > 50) v.shift();
                 var d = self.nodes[node]['last'][measurement];
-                $rootScope.$apply(function(){
-                    v.push(d);
-                });
-                console.log(v);
+                d.x = new Date();
+                v.push(d);
             }, 1000);
         };
     };
@@ -59,7 +57,7 @@ NodeService.service('Node', ['$http', '$rootScope', 'Socket', '$q', function ($h
         if(!node){
             for(var i in self.nodes){
                 node = i;
-                break;
+                //break;
             }
         }
         self.nodes[node] = self.nodes[node] || {};
@@ -87,7 +85,7 @@ NodeService.service('Node', ['$http', '$rootScope', 'Socket', '$q', function ($h
         if(!node){
             for(var i in self.nodes){
                 node = i;
-                break;
+                //break;
             }
         }
         self.nodes[node]['historic'][measurement] = self.nodes[node]['historic'][measurement] || [];
