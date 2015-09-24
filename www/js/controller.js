@@ -19,8 +19,8 @@ LabControllers.controller('LabBeacons', ['$scope', 'Region', function($scope, Re
 
 LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', function($scope, $routeParams, Node){
     $scope.data = {};
-    $scope.data.light = [{ values: Node.get_data(null, 'light'), key: 'Light' }, { values: Node.get_data(null, 'co2'), key: 'CO2' }];
-    $scope.data.temp = [{ values: Node.get_data(null, 'temperature'), key: 'Temperature' }, { values: Node.get_data(null, 'humidity'), key: 'Humidity' }];
+    $scope.data.light = [{ values: Node.get_data(null, 'node.light'), key: 'Light' }, { values: Node.get_data(null, 'node.co2'), key: 'CO2' }];
+    $scope.data.temp = [{ values: Node.get_data(null, 'node.temperature'), key: 'Temperature' }, { values: Node.get_data(null, 'node.humidity'), key: 'Humidity' }];
     $scope.options = {
         chart:{
             type: 'lineChart',
@@ -48,8 +48,8 @@ LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', funct
 
 LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', 'Lab', function($scope, Node, Lab){
     $scope.data = {};
-    $scope.data.light = [{ values: Node.get_historic(null, 'light'), key: 'Light' }, { values: Node.get_historic(null, 'co2'), key: 'CO2' }];
-    $scope.data.temp = [{ values: Node.get_historic(null, 'temperature'), key: 'Temperature' }, { values: Node.get_historic(null, 'humidity'), key: 'Humidity' }];
+    $scope.data.light = [{ values: Node.get_historic(null, 'node.light'), key: 'Light' }, { values: Node.get_historic(null, 'node.co2'), key: 'CO2' }];
+    $scope.data.temp = [{ values: Node.get_historic(null, 'node.temperature'), key: 'Temperature' }, { values: Node.get_historic(null, 'node.humidity'), key: 'Humidity' }];
     $scope.data.power_usage = Lab.get_power_usage();
     $scope.data.weather_data = Lab.get_weather_data();
     $scope.data.energy_usage = Lab.get_energy_usage();
