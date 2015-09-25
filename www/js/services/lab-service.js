@@ -18,7 +18,10 @@ LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q)
             });
         });
 
-        Socket.ws.$on('inoffice', function(data){
+        Socket.ws.$on('presence', function(data){
+            console.log("presence: ", data.user);
+            console.log("measurement: ", data.measurement);
+            console.log("fields: ", data.fields);
             for(i in self.users){
                 if(self.users[i]._id == data.user._id){
                     self.users[i] = data.user;
@@ -27,7 +30,7 @@ LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q)
             if(data.user._id == self.me._id){
                 self.me = data.user;
             }
-            var state = data.result ? "arrived" : "departed";
+            var state = data.user.in_office ? "arrived" : "departed";
             cordova.plugins.notification.local.schedule({
                 id: parseInt(data.user._id),
                 title: data.user.name+' has '+state+'.',

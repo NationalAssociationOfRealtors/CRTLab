@@ -126,7 +126,7 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region'
             $rootScope.$on('region:state', function(event, result){
                 if(Lab.me.in_office != result){
                     Lab.me.in_office = result;
-                    Socket.emit('inoffice', {'result':result});
+                    Socket.emit('presence', {'result':result});
                 }
             });
             try{
