@@ -68,7 +68,7 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region'
             .fail(console.error)
             .done();
     }catch(e){
-        console.error(e);
+        //console.error(e);
     }
 
     $rootScope.lab = Lab;

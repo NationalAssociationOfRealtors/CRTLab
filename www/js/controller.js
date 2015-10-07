@@ -34,7 +34,7 @@ LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', funct
             x: function(d){ return d.x; },
             y: function(d){ return d.y; },
             useInteractiveGuideline: true,
-            transitionDuration:1000,
+            transitionDuration:100,
             xAxis: {
                 tickFormat: function(d){
                     var da = new Date(d);
@@ -69,7 +69,7 @@ LabControllers.controller('LabSensorsHistoric', ['$scope', 'Node', 'Lab', functi
             },
             y: function(d){ return d.value ? d.value : d[1]; },
             useInteractiveGuideline: true,
-            transitionDuration:1000,
+            transitionDuration:100,
             xAxis: {
                 tickFormat: function(d){
                     var da = new Date(d);
