@@ -1,44 +1,16 @@
-var LabService = angular.module('LabService', ['SocketService']);
+var LocationService = angular.module('LocationService', []);
 
-LabService.service('Lab', ['$http', 'Socket', '$q', function ($http, Socket, $q){
-    this.users = [];
+LocationService.service('Location', ['$http', '$q', function ($http, $q){
     var self = this;
     this.me = {};
-    this.power_usage = [{values:[], key:'test'}];
-    this.weather_data = [{values:[], key:'test'}];
-    this.energy_usage = [{values:[], key:'test'}];
+    this.locations = {}
     this.init = function(){
         var d = $q.defer();
-        $http.get(api_url+"/lab/me").then(function(response){
-            self.me = response.data[0];
+        $http.get(api_url+"/location/list").then(function(response){
+            self.locations = response.data[0];
             d.resolve(self.me);
-        }).then(function(){
-            $http.get(api_url+"/lab/team").then(function(response){
-                angular.copy(response.data[0], self.users);
-            });
         });
 
-        Socket.ws.$on('presence', function(data){
-            console.log("presence: ", data.user);
-            console.log("measurement: ", data.measurement);
-            console.log("fields: ", data.fields);
-            for(i in self.users){
-                if(self.users[i]._id == data.user._id){
-                    self.users[i] = data.user;
-                }
-            }
-            if(data.user._id == self.me._id){
-                self.me = data.user;
-            }
-            var state = data.user.in_office ? "arrived" : "departed";
-            cordova.plugins.notification.local.schedule({
-                id: parseInt(data.user._id),
-                title: data.user.name+' has '+state+'.',
-                icon: "file://img/crt_logo.png",
-            });
-        });
-        return d.promise;
-    };
 
     this.get_power_usage = function(){
         $http.get(api_url+"/lab/ups").then(function(resp){

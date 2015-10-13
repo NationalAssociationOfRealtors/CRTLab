@@ -7,7 +7,7 @@ var socket_url = "wss://"+uri+"/socket";
 var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
 
-var CRTLab = angular.module('CRTLab', ['ngRoute', 'RegionService', 'http-auth-interceptor', 'SocketService', 'LoginService', 'LabService', 'nvd3', 'ngTouch', 'NodeService', 'LabControllers']);
+var CRTLab = angular.module('CRTLab', ['ngRoute', 'http-auth-interceptor', 'SocketService', 'LoginService', 'LocationService', 'nvd3', 'ngTouch', 'LabControllers']);
 
 var views = {
     index:{
@@ -35,9 +35,9 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
             templateUrl: 'partials/index.html',
             controller: 'LabIndex',
         }).
-        when('/user/:userId', {
-            templateUrl: 'partials/user.html',
-            controller: 'LabUser',
+        when('/location/:locationId', {
+            templateUrl: 'partials/location.html',
+            controller: 'LabLocation',
         }).
         when('/sensors', {
             templateUrl: 'partials/sensors.html',
@@ -56,22 +56,9 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region', 'Socket', 'Auth', 'Lab', 'authService', 'Node', function($http, $window, $rootScope, $interval, $location, Region, Socket, Auth, Lab, authService, Node){
-    try{
-        cordova.plugins.locationManager.isBluetoothEnabled()
-            .then(function(isEnabled){
-                console.log("Bluetooth isEnabled: " + isEnabled);
-                if (!isEnabled) {
-                    cordova.plugins.locationManager.enableBluetooth();
-                }
-            })
-            .fail(console.error)
-            .done();
-    }catch(e){
-        //console.error(e);
-    }
+CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket', 'Auth', 'Location', 'authService', function($http, $window, $rootScope, $interval, $location, Socket, Auth, Location, authService){
 
-    $rootScope.lab = Lab;
+    $rootScope.location = Location;
 
     $rootScope.$on("$locationChangeStart", function(event, next, current){
         console.log(next);
@@ -122,24 +109,9 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Region'
     function init(){
         console.log("Init App");
         Socket.init(socket_url, api_token, client_id);
-        Lab.init().then(function(me){
-            $rootScope.$on('region:state', function(event, result){
-                if(Lab.me.in_office != result){
-                    Lab.me.in_office = result;
-                    Socket.emit('presence', {'result':result});
-                }
-            });
-            try{
-                Region.init({
-                    uuid:BEACON_UUID,
-                    id:'CRTLabs'
-                });
-            }catch(e){
-                console.error(e);
-            }
+        Location.init().then(function(locations){
+            console.log(locations);
         });
-
-        Node.init();
 
         document.addEventListener('pause', pause, false);
         document.addEventListener('resign', pause, false);

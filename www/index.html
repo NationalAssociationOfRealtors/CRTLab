@@ -25,7 +25,7 @@
     <script src="js/services/region-service.js"></script>
     <script src="js/services/socket-service.js"></script>
     <script src="js/services/login-service.js"></script>
-    <script src="js/services/lab-service.js"></script>
+    <script src="js/services/location-service.js"></script>
     <script src="js/services/node-service.js"></script>
     <script src="js/index.js"></script>
 </head>
@@ -33,25 +33,7 @@
     <nav class="navbar navbar-default navbar-fixed-top">
         <div class="container-fluid">
             <div class="navbar-header">
-                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#lab-nav-collapse" aria-expanded="false">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="#/index">
-                    CRTLabs
-                </a>
-                <p class="navbar-btn pull-right nav-inoffice">
-                    <a href="#/index" class="btn btn-success" ng-show="lab.me.in_office">In Office</a>
-                    <a href="#/index" class="btn btn-danger" ng-show="!lab.me.in_office">Out of Office</a>
-                </p>
-            </div>
-            <div class="collapse navbar-collapse" id="lab-nav-collapse">
-                <ul class="nav navbar-nav">
-                    <li><a data-toggle="collapse" data-target="#lab-nav-collapse" ng-href="#/sensors">Sensors</a></li>
-                    <li><a data-toggle="collapse" data-target="#lab-nav-collapse" ng-href="#/historic">Historic</a></li>
-                </ul>
+                <a class="navbar-brand" href="#/index">CRTLabs</a>
             </div>
         </div>
     </nav>

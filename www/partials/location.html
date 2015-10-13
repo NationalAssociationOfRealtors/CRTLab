@@ -1,0 +1,22 @@
+<h1>{{data.location.name}}</h1>
+<ul class="list-group">
+    <li ng-repeat="(key, value) in data.data" class="list-group-item">
+        <h2>{{key}}</h2>
+        <ul class="list-group">
+            <li ng-repeat="(k, v) in value" class="list-group-item">
+                <h3>{{k}}</h3>
+                <p>{{v.current[0].value}}</p>
+                <nvd3 data="v.historical" options="options.sparkline"></nvd3>
+                <nvd3 data="{
+                    ranges:[
+                        v.aggregate[0].min_value,
+                        v.aggregate[0].mean_value,
+                        v.aggregate[0].max_value,
+                    ],
+                    measures: [v.current[0].value],
+                    markers: [v.previous[0].value],
+                }" options="options.bullet"></nvd3>
+            </li>
+        </ul>
+    </li>
+</ul>

@@ -1,8 +1,47 @@
 var LabControllers = angular.module('LabControllers', []);
 
-LabControllers.controller('LabIndex', ['$scope', 'Lab', 'Region', function($scope, Lab, Region){
-    $scope.region = Region;
-    $scope.lab = Lab;
+LabControllers.controller('LabIndex', ['$scope', 'Location', function($scope, Location){
+    $scope.location = Location;
+}]);
+
+LabControllers.controller('LabLocation', ['$scope', '$routeParams', 'Location', function($scope, $routeParams, Location){
+    $scope.data = {};
+    $scope.options = {};
+    $scope.options.sparkline = {
+        chart:{
+            type: 'sparklinePlus',
+            height: 100,
+            x: function(d){
+                var da = new Date(d.time);
+                return da;
+            },
+            y: function(d){ return d.value; },
+            xTickFormat: function(d){
+                return d3.time.format('%x %X')(d);
+            },
+            transitionDuration: 250,
+            noData: "Loading..."
+        }
+    }
+
+    $scope.options.bullet = {
+        chart: {
+            height: 45,
+            type: 'bulletChart',
+            transitionDuration: 500,
+            margin:{
+                left:0,
+                top:10,
+                right: 0,
+                bottom: 0,
+            }
+        }
+    }
+
+    Location.get_location_data($routeParams.locationId).then(function(data){
+        console.log(data);
+        $scope.data = data;
+    });
 }]);
 
 LabControllers.controller('LabUser', ['$scope', '$routeParams', 'Lab', function($scope, $routeParams, Lab){

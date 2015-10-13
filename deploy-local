@@ -1,0 +1,1 @@
+rsync -rzhe ssh --exclude='/.git' --filter=':- .gitignore' --progress ./www/ /app/LabLog/www

@@ -1,15 +1,6 @@
-<h3>Team</h3>
+<h3>Locations</h3>
 <ul class="list-group">
-    <li ng-repeat="user in lab.users" class="list-group-item">
-        <a ng-href="#/user/{{user._id}}">{{user.name}}</a>
-        <span class="label label-success pull-right" ng-show="user.in_office">In</span>
-        <span class="label label-danger pull-right" ng-show="!user.in_office">Out</span>
-    </li>
-</ul>
-<h3>Beacons</h3>
-<ul class="list-group">
-    <li ng-repeat="beacon in region.beacons" class="list-group-item">
-        {{beacon.major}}:{{beacon.minor}}
-        <span class="badge">{{beacon.proximity}}</span>
+    <li ng-repeat="loc in location.locations" class="list-group-item">
+        <a ng-href="#/location/{{loc._id}}">{{loc.name}}</a>
     </li>
 </ul>
