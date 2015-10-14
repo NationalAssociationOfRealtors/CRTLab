@@ -20,7 +20,7 @@
             <td colspan="4"><h3>{{key}}</h3></td>
         </tr>
         <tr ng-repeat="(k, v) in value">
-            <td><div>{{k.split(".").slice(-1)[0].replace("_", "-")}}</div></td>
+            <td><div><span ng-show="v.trigger" class="warning-{{v.trigger}} glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span> {{k.split(".").slice(-1)[0].replace("_", "-")}}</div></td>
             <td>
                 <div>
                     <nvd3 data="v.historical" options="options.sparkline"></nvd3>

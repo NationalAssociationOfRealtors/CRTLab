@@ -17,3 +17,7 @@ body {
 th{
     text-align: center;
 }
+
+.warning-1{
+    color: #ff0000;
+}
