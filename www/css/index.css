@@ -13,3 +13,7 @@ body {
 .nav-inoffice{
     margin-right: 10px;
 }
+
+th{
+    text-align: center;
+}

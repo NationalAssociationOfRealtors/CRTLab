@@ -10,7 +10,14 @@ LabControllers.controller('LabLocation', ['$scope', '$routeParams', 'Location', 
     $scope.options.sparkline = {
         chart:{
             type: 'sparklinePlus',
-            height: 100,
+            height: 50,
+            showLastValue: false,
+            margin:{
+                top:0,
+                left:5,
+                bottom:5,
+                right: 15,
+            },
             x: function(d){
                 var da = new Date(d.time);
                 return da;
@@ -19,22 +26,22 @@ LabControllers.controller('LabLocation', ['$scope', '$routeParams', 'Location', 
             xTickFormat: function(d){
                 return d3.time.format('%x %X')(d);
             },
-            transitionDuration: 250,
+            transitionDuration: 0,
             noData: "Loading..."
         }
     }
 
     $scope.options.bullet = {
         chart: {
-            height: 45,
+            height: 50,
             type: 'bulletChart',
-            transitionDuration: 500,
+            transitionDuration: 100,
             margin:{
-                left:0,
-                top:10,
-                right: 0,
-                bottom: 0,
-            }
+                left:10,
+                top:0,
+                right: 10,
+                bottom: 25,
+            },
         }
     }
 

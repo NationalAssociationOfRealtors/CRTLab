@@ -1,22 +1,47 @@
 <h1>{{data.location.name}}</h1>
-<ul class="list-group">
-    <li ng-repeat="(key, value) in data.data" class="list-group-item">
-        <h2>{{key}}</h2>
-        <ul class="list-group">
-            <li ng-repeat="(k, v) in value" class="list-group-item">
-                <h3>{{k}}</h3>
-                <p>{{v.current[0].value}}</p>
-                <nvd3 data="v.historical" options="options.sparkline"></nvd3>
-                <nvd3 data="{
-                    ranges:[
-                        v.aggregate[0].min_value,
-                        v.aggregate[0].mean_value,
-                        v.aggregate[0].max_value,
-                    ],
-                    measures: [v.current[0].value],
-                    markers: [v.previous[0].value],
-                }" options="options.bullet"></nvd3>
-            </li>
-        </ul>
-    </li>
-</ul>
+
+<table class="table" style="table-layout: fixed;">
+    <colgroup>
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 35%;">
+       <col span="1" style="width: 15%;">
+       <col span="1" style="width: 35%;">
+    </colgroup>
+    <thead>
+        <tr>
+            <th>Metrics</th>
+            <th>Last 2 days</th>
+            <th>Current</th>
+            <th>Variance</th>
+        </tr>
+    <thead>
+    <tbody>
+        <tr ng-repeat-start="(key, value) in data.data">
+            <td colspan="4"><h3>{{key}}</h3></td>
+        </tr>
+        <tr ng-repeat="(k, v) in value">
+            <td><div>{{k.split(".").slice(-1)[0].replace("_", "-")}}</div></td>
+            <td>
+                <div>
+                    <nvd3 data="v.historical" options="options.sparkline"></nvd3>
+                </div>
+            </td>
+            <td><div>{{v.current[0].value | number: 2}}</div></td>
+            <td>
+                <div>
+                    <nvd3 data="{
+                        ranges:[
+                            $filter('number')(v.aggregate[0].min_value, 2),
+                            v.aggregate[0].mean_value,
+                            v.aggregate[0].max_value,
+                        ],
+                        measures: [v.current[0].value],
+                        markers: [v.previous[0].value],
+                    }" options="options.bullet">
+                    </nvd3>
+                </div>
+            </td>
+        </tr>
+        <tr ng-repeat-end style="display: none;"><tr>
+    </tbody>
+</table>
