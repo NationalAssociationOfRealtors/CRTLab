@@ -1,7 +1,42 @@
 var LabControllers = angular.module('LabControllers', []);
 
-LabControllers.controller('LabIndex', ['$scope', 'Location', function($scope, Location){
+LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', function($scope, Location, Interface){
+    console.log("Index");
     $scope.location = Location;
+    $scope.data = {};
+    $scope.options = {
+        chart:{
+            type: 'lineChart',
+            height: 225,
+            margin : {
+                top: 35,
+                right: 25,
+                bottom: 40,
+                left: 30
+            },
+            x: function(d){ return d.x; },
+            y: function(d){ return d.y; },
+            useInteractiveGuideline: true,
+            transitionDuration:100,
+            xAxis: {
+                tickFormat: function(d){
+                    return d3.time.format('%H:%M:%S')(new Date(d));
+                }
+            },
+            noData: "Loading..."
+        }
+    }
+    Location.init().then(function(){
+        for(var l in Location.locations){
+            var loc = Location.locations[l];
+            for(var i in loc.interfaces){
+                var inter = loc.interfaces[i].interface;
+                if(inter.cls == 'lablog.interfaces.netatmo.NetAtmo'){
+                    $scope.data[loc._id] = [{ values: Interface.get_data(inter.id, 'netatmo.indoor.temperature'), key: 'Indoor Temperature' }, { values: Interface.get_data(inter.id, 'netatmo.indoor.humidity'), key: 'Indoor Humidity' }];
+                }
+            }
+        }
+    });
 }]);
 
 LabControllers.controller('LabLocation', ['$scope', '$routeParams', 'Location', function($scope, $routeParams, Location){
@@ -65,7 +100,7 @@ LabControllers.controller('LabBeacons', ['$scope', 'Region', function($scope, Re
 
 LabControllers.controller('LabSensors', ['$scope', '$routeParams', 'Node', function($scope, $routeParams, Node){
     $scope.data = {};
-    $scope.data.light = [{ values: Node.get_data(null, 'node.light'), key: 'Light' }, { values: Node.get_data(null, 'node.co2'), key: 'CO2' }];
+    $scope.data.light = [{ values: Interface.get_data(null, 'node.light'), key: 'Light' }, { values: Node.get_data(null, 'node.co2'), key: 'CO2' }];
     $scope.data.temp = [{ values: Node.get_data(null, 'node.temperature'), key: 'Temperature' }, { values: Node.get_data(null, 'node.humidity'), key: 'Humidity' }];
     $scope.options = {
         chart:{

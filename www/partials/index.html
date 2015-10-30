@@ -2,5 +2,6 @@
 <ul class="list-group">
     <li ng-repeat="loc in location.locations" class="list-group-item">
         <a ng-href="#/location/{{loc._id}}">{{loc.name}}</a>
+        <nvd3 data="data[loc._id]" options="options" config="{refreshDataOnly: true, deepWatchData: true}"></nvd3>
     </li>
 </ul>

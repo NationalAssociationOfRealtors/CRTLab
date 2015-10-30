@@ -7,7 +7,7 @@ var socket_url = "wss://"+uri+"/socket";
 var client_id = "55df1e9c64bd32000c24b167";
 var api_token = null;
 
-var CRTLab = angular.module('CRTLab', ['ngRoute', 'http-auth-interceptor', 'SocketService', 'LoginService', 'LocationService', 'nvd3', 'ngTouch', 'LabControllers']);
+var CRTLab = angular.module('CRTLab', ['ngRoute', 'http-auth-interceptor', 'SocketService', 'LoginService', 'LocationService', 'InterfaceService', 'nvd3', 'ngTouch', 'LabControllers']);
 
 var views = {
     index:{
@@ -40,10 +40,10 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
             controller: 'LabLocation',
         }).
         when('/sensors', {
-            templateUrl: 'partials/sensors.html',
             controller: 'LabSensors',
         }).
         when('/historic', {
+            templateUrl: 'partials/sensors.html',
             templateUrl: 'partials/historic.html',
             controller: 'LabSensorsHistoric',
         }).
@@ -56,25 +56,20 @@ CRTLab.config(['$routeProvider', function($routeProvider) {
         });
 }]);
 
-CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket', 'Auth', 'Location', 'authService', function($http, $window, $rootScope, $interval, $location, Socket, Auth, Location, authService){
+CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket', 'Auth', 'Location', 'authService', 'Interface', function($http, $window, $rootScope, $interval, $location, Socket, Auth, Location, authService, Interface){
 
     $rootScope.location = Location;
 
     $rootScope.$on("$locationChangeStart", function(event, next, current){
-        console.log(next);
         current_view = next.split("#/");
         current_view = current_view.length > 1 ? current_view[1] : 'index';
     });
 
     $rootScope.load_next = function(event){
-        console.log(event);
-        console.log(views[current_view].next);
         $location.url("/"+views[current_view].next);
     }
 
     $rootScope.load_previous = function(event){
-        console.log(event);
-        console.log(views[current_view].previous);
         $location.url("/"+views[current_view].previous);
     }
 
@@ -87,7 +82,6 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket'
     });
 
     $rootScope.$on('event:auth-loginRequired', function(event, data){
-        console.log("login required!");
         login();
     });
 
@@ -101,18 +95,17 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket'
 
     Auth.get_token().then(function(token){
         api_token = token;
-        init();
+        Location.init().then(function(){
+            init();
+        })
     }, function(){
         login();
     });
 
     function init(){
-        console.log("Init App");
+        console.debug("Init App");
         Socket.init(socket_url, api_token, client_id);
-        Location.init().then(function(locations){
-            console.log(locations);
-        });
-
+        Interface.init();
         document.addEventListener('pause', pause, false);
         document.addEventListener('resign', pause, false);
         document.addEventListener('resume', resume, false);
@@ -123,7 +116,9 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket'
         Auth.login().then(function(result){
             api_token = result.token;
             authService.loginConfirmed();
-            init();
+            Location.init().then(function(){
+                init();
+            });
         }, function(error){
             console.log(error);
         });
