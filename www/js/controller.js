@@ -23,6 +23,11 @@ LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', functi
                     return d3.time.format('%H:%M:%S')(new Date(d));
                 }
             },
+            yAxis: {
+                domain: [0, 100],
+                range: [0, 100],
+            },
+            forceY: [0, 100],
             noData: "Loading..."
         }
     }
@@ -32,7 +37,22 @@ LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', functi
             for(var i in loc.interfaces){
                 var inter = loc.interfaces[i].interface;
                 if(inter.cls == 'lablog.interfaces.netatmo.NetAtmo'){
-                    $scope.data[loc._id] = [{ values: Interface.get_data(inter.id, 'netatmo.indoor.temperature'), key: 'Indoor Temperature' }, { values: Interface.get_data(inter.id, 'netatmo.indoor.humidity'), key: 'Indoor Humidity' }];
+                    var start_indoor_temp = 0;
+                    var start_indoor_hum = 0;
+                    var start_outdoor_temp = 0;
+                    var start_outdoor_hum = 0;
+                    if(loc.current['netatmo.indoor.temperature']){
+                        var start_indoor_temp = loc.current['netatmo.indoor.temperature'].current[0].value;
+                        var start_indoor_hum = loc.current['netatmo.indoor.humidity'].current[0].value;
+                        var start_outdoor_temp = loc.current['netatmo.outdoor.temperature'].current[0].value;
+                        var start_outdoor_hum = loc.current['netatmo.outdoor.humidity'].current[0].value;
+                    }
+                    $scope.data[loc._id] = [
+                        { values: Interface.get_data(inter.id, 'netatmo.indoor.temperature', start_indoor_temp), key: 'Indoor Temperature' },
+                        { values: Interface.get_data(inter.id, 'netatmo.indoor.humidity', start_indoor_hum), key: 'Indoor Humidity' },
+                        { values: Interface.get_data(inter.id, 'netatmo.outdoor.humidity', start_outdoor_hum), key: 'Outdoor Humidity' },
+                        { values: Interface.get_data(inter.id, 'netatmo.outdoor.temperature', start_outdoor_temp), key: 'Outdoor Temperature' },
+                    ];
                 }
             }
         }

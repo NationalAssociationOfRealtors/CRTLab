@@ -49,7 +49,8 @@ InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', fu
         }
     };
 
-    this.get_data = function(_interface, measurement){
+    this.get_data = function(_interface, measurement, start){
+        start = start || 0;
         if(!_interface){
             for(var i in self.interfaces){
                 _interface = i;
@@ -58,7 +59,7 @@ InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', fu
         }
         self.interfaces[_interface] = self.interfaces[_interface] || {};
         self.interfaces[_interface]['last'] = self.interfaces[_interface]['last'] || {};
-        self.interfaces[_interface]['last'][measurement] = self.interfaces[_interface]['last'][measurement] || {x:new Date(), y:0};
+        self.interfaces[_interface]['last'][measurement] = self.interfaces[_interface]['last'][measurement] || {x:new Date(), y:start};
         self.interfaces[_interface]['realtime'] = self.interfaces[_interface]['realtime'] || {};
         self.interfaces[_interface]['realtime'][measurement] = self.interfaces[_interface]['realtime'][measurement] || [];
         fill_data(_interface, measurement);
