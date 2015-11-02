@@ -1,6 +1,6 @@
 var InterfaceService = angular.module('InterfaceService', ['SocketService']);
 
-InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', function ($http, $rootScope, Socket, $q){
+InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', '$interval', function ($http, $rootScope, Socket, $q, $interval){
     this.interfaces = {};
     var self = this;
     loading_historic = false;
@@ -22,16 +22,14 @@ InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', fu
         var k = _interface+":"+measurement;
         console.debug("Filling: ", _interface, measurement);
         if(!timers[k]){
-            timers[k] = setInterval(function(){
+            timers[k] = $interval(function(){
                 var v = self.interfaces[_interface]['realtime'][measurement];
-                if(v.length == 30) v.shift();
+                if(v.length == 20) v.shift();
                 var d = {};
                 angular.copy(self.interfaces[_interface]['last'][measurement], d);
                 d.x = new Date();
-                $rootScope.$apply(function(){
-                    v.push(d);
-                });
-            }, 3000);
+                v.push(d);
+            }, 5000);
         };
     };
 

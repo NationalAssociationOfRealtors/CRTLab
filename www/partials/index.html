@@ -1,6 +1,6 @@
 <h3>Locations</h3>
 <ul class="list-group">
-    <li ng-repeat="loc in location.locations" class="list-group-item">
+    <li ng-repeat="loc in location.locations" class="list-group-item" ng-show="loc.current['netatmo.indoor.temperature'].current[0].value">
         <a ng-href="#/location/{{loc._id}}">{{loc.name}}</a>
         <nvd3 data="data[loc._id]" options="options" config="{refreshDataOnly: true, deepWatchData: true}"></nvd3>
     </li>
