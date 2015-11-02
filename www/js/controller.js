@@ -14,10 +14,10 @@ LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', functi
                 bottom: 40,
                 left: 30
             },
-            x: function(d){ return d.x; },
-            y: function(d){ return d.y; },
+            //x: function(d){ return d.x; },
+            //y: function(d){ return d.y; },
             useInteractiveGuideline: true,
-            transitionDuration:100,
+            transitionDuration:0,
             xAxis: {
                 tickFormat: function(d){
                     return d3.time.format('%H:%M:%S')(new Date(d));

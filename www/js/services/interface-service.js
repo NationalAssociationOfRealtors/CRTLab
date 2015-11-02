@@ -31,7 +31,7 @@ InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', fu
                 $rootScope.$apply(function(){
                     v.push(d);
                 });
-            }, 1000);
+            }, 3000);
         };
     };
 
