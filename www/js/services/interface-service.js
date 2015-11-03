@@ -21,14 +21,18 @@ InterfaceService.service('Interface', ['$http', '$rootScope', 'Socket', '$q', '$
     function fill_data(_interface, measurement){
         var k = _interface+":"+measurement;
         console.debug("Filling: ", _interface, measurement);
+        function fill(){
+            var v = self.interfaces[_interface]['realtime'][measurement];
+            if(v.length == 20) v.shift();
+            var d = {};
+            angular.copy(self.interfaces[_interface]['last'][measurement], d);
+            d.x = new Date();
+            v.push(d);
+        }
+        fill();
         if(!timers[k]){
             timers[k] = $interval(function(){
-                var v = self.interfaces[_interface]['realtime'][measurement];
-                if(v.length == 20) v.shift();
-                var d = {};
-                angular.copy(self.interfaces[_interface]['last'][measurement], d);
-                d.x = new Date();
-                v.push(d);
+                fill();
             }, 5000);
         };
     };
