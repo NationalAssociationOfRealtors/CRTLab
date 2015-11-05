@@ -30,7 +30,11 @@ LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', functi
         }
     }
     $scope.$on('location:loaded', function(e, locations){
-        console.log(locations);
+        populate_graphs(locations);
+    });
+    populate_graphs(Location.locations);
+    
+    function populate_graphs(locations){
         for(var l in locations){
             var loc = Location.locations[l];
             for(var i in loc.interfaces){
@@ -55,7 +59,7 @@ LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', functi
                 }
             }
         }
-    });
+    };
 }]);
 
 LabControllers.controller('LabLocation', ['$scope', '$routeParams', 'Location', function($scope, $routeParams, Location){
