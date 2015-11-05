@@ -27,8 +27,8 @@ SocketService.service('Socket', ['$rootScope', '$websocket', function ($rootScop
             console.log("WS is closed");
         });
         me.ws.$on('invalid_access', function(data){
-            //me.ws.$close();
-            //$rootScope.$broadcast('event:auth-loginRequired', data);
+            me.ws.$close();
+            $rootScope.$broadcast('event:auth-loginRequired', data);
         });
         me.ws.$open();
         ping();
