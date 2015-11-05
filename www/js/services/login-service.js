@@ -51,7 +51,7 @@ var LoginService = angular.module('LoginService', []);
     }
 
     this.set_token = function(token){
-        $http.defaults.headers.common.Authorization = " Bearer " + token;
+        $http.defaults.headers.common.Authorization = "Bearer " + token;
         $window.localStorage.setItem("token", token);
     }
 
