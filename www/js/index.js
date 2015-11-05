@@ -95,20 +95,20 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket'
 
     Auth.get_token().then(function(token){
         api_token = token;
-        Location.init().then(function(){
-            init();
-        })
+        init();
     }, function(){
         login();
     });
 
     function init(){
-        console.debug("Init App");
+        console.debug("Initializing");
         Socket.init(socket_url, api_token, client_id);
         Interface.init();
+        Location.init();
         document.addEventListener('pause', pause, false);
         document.addEventListener('resign', pause, false);
         document.addEventListener('resume', resume, false);
+        console.log("Initialized");
 
     }
 
@@ -116,9 +116,7 @@ CRTLab.run(['$http', '$window', '$rootScope', '$interval', '$location', 'Socket'
         Auth.login().then(function(result){
             api_token = result.token;
             authService.loginConfirmed();
-            Location.init().then(function(){
-                init();
-            });
+            init();
         }, function(error){
             console.log(error);
         });

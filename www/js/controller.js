@@ -29,8 +29,9 @@ LabControllers.controller('LabIndex', ['$scope', 'Location', 'Interface', functi
             noData: "Loading..."
         }
     }
-    Location.init().then(function(){
-        for(var l in Location.locations){
+    $scope.$on('location:loaded', function(e, locations){
+        console.log(locations);
+        for(var l in locations){
             var loc = Location.locations[l];
             for(var i in loc.interfaces){
                 var inter = loc.interfaces[i].interface;
