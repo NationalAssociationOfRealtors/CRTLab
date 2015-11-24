@@ -31,7 +31,7 @@
                 <div>
                     <nvd3 data="{
                         ranges:[
-                            $filter('number')(v.aggregate[0].min_value, 2),
+                            v.aggregate[0].min_value,
                             v.aggregate[0].mean_value,
                             v.aggregate[0].max_value,
                         ],
